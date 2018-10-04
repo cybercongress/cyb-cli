@@ -1,0 +1,24 @@
+{
+  "name": "cyb",
+  "version": "0.0.15",
+  "description": "",
+  "main": "index.js",
+  "preferGlobal": true,
+  "bin": "./index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:cybercongress/cyb.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "2.15.1",
+    "ipfs-api": "22.0.0",
+    "minimatch": "^3.0.4",
+    "mkdirp": "^0.5.1",
+    "superagent": "3.8.3"
+  }
+}
