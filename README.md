@@ -6,5 +6,9 @@
 ```
 npm install cyb -g
 
-cyb add ../apps/test/ test
+cyb init testApp
+
+cd testApp
+
+npm start
 ```

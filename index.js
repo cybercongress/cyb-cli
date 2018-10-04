@@ -171,6 +171,7 @@ program
         copyTemplateMulti('', appName, '*.png');
         copyTemplateMulti('app', path.join(appName, 'app'), '*.*', 'utf8');
         copyTemplateMulti('app', path.join(appName, 'app'), '*.png');
+        copyTemplateMulti('app', path.join(appName, 'app'), '*.ico');
         copyTemplateMulti('app/src', path.join(appName, 'app/src'), '*.*', 'utf8');
         copyTemplateMulti('app/src/containers', path.join(appName, 'app/src/containers'), '*.*', 'utf8');
 
@@ -190,7 +191,6 @@ program
                 "history": "3.0.0",
                 "json-loader": "0.5.7",
                 "jsx-loader": "0.13.2",
-                "lodash": "4.17.4",
                 "react": "15.6.1",
                 "react-dom": "15.6.1"
             },
