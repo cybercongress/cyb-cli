@@ -11,7 +11,7 @@ const ipfs = new IPFS({host: 'localhost', port: 5001, protocol: 'http'});
 const fs = require('fs');
 const path = require('path');
 const request = require('superagent');
-const {exec} = require('child_process');
+const { exec } = require('child_process');
 
 const cliPkg = require('./package.json')
 
@@ -251,14 +251,28 @@ program
 program
     .command('link')
     .description('Link local app to browser local apps')
-    .action(() => {
-
+    .action(async () => {
         const manifest = JSON.parse(fs.readFileSync('./manifest.json', 'utf8'));
 
-        //todo: commands for linux and windows
-        const command = `ln -s $PWD/ $HOME/Library/Application\\ Support/cyb/dapps/${manifest.name}`;
+        const srcPath = process.env.PWD;
+        const destPath = path.join(process.env.HOME, `/Library/Application\\ Support/cyb/dapps/${manifest.ext}`);
 
-        exec(command);
+        console.log(`App path: ${srcPath} \nCyb path: ${destPath}`);
+
+        const isSymlinkExist = await isFinderAlias(destPath);
+
+        if (isSymlinkExist) {
+            console.log('Link already exist');
+        } else {
+            //todo: commands for linux and windows
+            exec(`ln -s ${srcPath} ${destPath}`, function(error, stdout, stderr){
+                if (stderr) {
+                    console.log(stderr);
+                } else {
+                    console.log('Link created');
+                }
+            });
+        }
     });
 
 program
@@ -267,11 +281,28 @@ program
     .action(() => {
 
         const manifest = JSON.parse(fs.readFileSync('./manifest.json', 'utf8'));
+        const destPath = path.join(process.env.HOME, `/Library/Application\\ Support/cyb/dapps/${manifest.ext}`);
 
         //todo: commands for linux and windows
-        const command = `unlink $HOME/Library/Application\\ Support/cyb/dapps/${manifest.name}`;
-
-        exec(command);
+        exec(`unlink ${destPath}`, function(error, stdout, stderr){
+            if (stderr) {
+                console.log(stderr);
+            } else {
+                console.log('Unlinked');
+            }
+        });
     });
+
+function isFinderAlias(path) {
+    return new Promise((resolve, reject) => {
+        exec(`mdls -raw -name kMDItemContentType ${path}`, (e, stdout, stderr) => {
+            if (e) {
+                resolve(false);
+            } else {
+                resolve(stdout === 'public.folder');
+            }
+        })
+    })
+}
 
 program.parse(process.argv);
